@@ -1,12 +1,7 @@
-FROM nginx:1.27-alpine
-
-COPY index.html /usr/share/nginx/html/index.html
-COPY manifest.webmanifest /usr/share/nginx/html/manifest.webmanifest
-COPY sw.js /usr/share/nginx/html/sw.js
-COPY icon.svg /usr/share/nginx/html/icon.svg
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -q -O- http://127.0.0.1:8080/ >/dev/null 2>&1 || exit 1
-
-EXPOSE 8080
+# Static site served via nginx
+FROM nginx:alpine
+COPY . /usr/share/nginx/html
+RUN chown -R nginx:nginx /usr/share/nginx/html
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3   CMD wget -q --spider http://localhost:80/ || exit 1
+CMD ["nginx", "-g", "daemon off;"]

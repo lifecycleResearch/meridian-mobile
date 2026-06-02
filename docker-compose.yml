@@ -1,0 +1,6 @@
+services:
+  meridian-mobile:
+    build: .
+    container_name: meridian-mobile
+    ports: ["80:80"]
+    restart: unless-stopped
